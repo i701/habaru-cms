@@ -1,0 +1,33 @@
+services:
+  habaru-strapi:
+    container_name: habaru-strapi
+    image: docker.io/i701/habaru-cms:main
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - 127.0.0.1:1337:1337
+    volumes:
+      - ./config:/opt/app/config
+      - ./src:/opt/app/src
+      - ./package.json:/opt/package.json
+      - ./yarn.lock:/opt/yarn.lock
+      - ./.env:/opt/app/.env
+      - ./public/uploads:/opt/app/public/uploads
+    depends_on:
+      - habaru-strapi-db
+
+  habaru-strapi-db:
+    container_name: habaru-strapi-db
+    platform: linux/amd64
+    restart: unless-stopped
+    env_file: .env
+    image: postgres:12.0-alpine
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - ./habaru_db_data:/var/lib/postgresql/data/
+
+    ports:
+      - 5555:5432
