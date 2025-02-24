@@ -50,6 +50,9 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::news-post.news-post"
+    },
+    "views": {
+      "type": "integer"
     }
   }
 }
