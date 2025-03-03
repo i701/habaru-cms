@@ -10,9 +10,6 @@
     "start": "strapi start",
     "strapi": "strapi"
   },
-  "workspaces": [
-    "./src/plugins/strapi-plugin-ckeditor"
-  ],
   "dependencies": {
     "@strapi/plugin-cloud": "5.10.4",
     "@strapi/plugin-users-permissions": "5.10.4",
