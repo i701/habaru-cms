@@ -14,8 +14,7 @@ WORKDIR /opt/
 COPY package.json yarn.lock ./
 
 # Install yarn globally and add necessary packages
-RUN yarn global add node-gyp && \
-    yarn add pg && \
+RUN yarn global add node-gyp pg && \
     yarn config set network-timeout 600000 -g && \
     yarn install --frozen-lockfile --production
 
