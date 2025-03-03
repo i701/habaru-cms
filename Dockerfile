@@ -19,7 +19,6 @@ RUN yarn global add node-gyp && \
     yarn config set network-timeout 600000 -g && \
     yarn install --frozen-lockfile --production
 
-
 # Set PATH environment variable
 ENV PATH /opt/node_modules/.bin:$PATH
 
@@ -29,8 +28,11 @@ WORKDIR /opt/app
 # Copy the rest of the application code
 COPY . .
 
-# Generate TypeScript types and build the project
-RUN yarn run strapi ts:generate-types && \
+# Install local plugins and generate types
+RUN cd /opt/app/src/plugins/strapi-plugin-ckeditor && \
+    yarn install && \
+    cd /opt/app && \
+    yarn run strapi ts:generate-types && \
     yarn build
 
 # Stage 2: Final Production Image
