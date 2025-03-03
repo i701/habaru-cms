@@ -15,7 +15,7 @@ COPY package.json yarn.lock ./
 
 # Install yarn globally and add necessary packages
 RUN yarn global add node-gyp && \
-    yarn add pg -W && \
+    yarn add pg && \
     yarn config set network-timeout 600000 -g && \
     yarn install --frozen-lockfile --production
 
@@ -25,16 +25,11 @@ ENV PATH /opt/node_modules/.bin:$PATH
 # Set working directory for the app
 WORKDIR /opt/app
 
-# Copy the entire project
+# Copy the rest of the application code
 COPY . .
 
-# Ensure local plugin directory exists and install its dependencies
-RUN mkdir -p /opt/app/src/plugins/strapi-plugin-ckeditor && \
-    cp -R src/plugins/strapi-plugin-ckeditor/* /opt/app/src/plugins/strapi-plugin-ckeditor/ && \
-    cd /opt/app/src/plugins/strapi-plugin-ckeditor && \
-    yarn install && \
-    cd /opt/app && \
-    yarn run strapi ts:generate-types && \
+# Generate TypeScript types and build the project
+RUN yarn run strapi ts:generate-types && \
     yarn build
 
 # Stage 2: Final Production Image

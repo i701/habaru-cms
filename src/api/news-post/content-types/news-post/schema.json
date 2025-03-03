@@ -53,13 +53,6 @@
     },
     "views": {
       "type": "integer"
-    },
-    "ck_content": {
-      "type": "customField",
-      "options": {
-        "preset": "defaultHtml"
-      },
-      "customField": "plugin::ckeditor5.CKEditor"
     }
   }
 }

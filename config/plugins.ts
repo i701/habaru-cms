@@ -1,6 +1,6 @@
 export default {
-	ckeditor: {
-		enabled: true,
-		resolve: "./src/plugins/strapi-plugin-ckeditor",
-	},
+	// ckeditor: {
+	// 	enabled: false,
+	// 	resolve: "./src/plugins/strapi-plugin-ckeditor",
+	// },
 };

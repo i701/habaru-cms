@@ -423,13 +423,6 @@ export interface ApiNewsPostNewsPost extends Struct.CollectionTypeSchema {
         'vaahaka',
       ]
     >;
-    ck_content: Schema.Attribute.RichText &
-      Schema.Attribute.CustomField<
-        'plugin::ckeditor5.CKEditor',
-        {
-          preset: 'defaultHtml';
-        }
-      >;
     comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     content: Schema.Attribute.Blocks & Schema.Attribute.Required;
     cover_img: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
