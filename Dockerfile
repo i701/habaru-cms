@@ -25,11 +25,13 @@ ENV PATH /opt/node_modules/.bin:$PATH
 # Set working directory for the app
 WORKDIR /opt/app
 
-# Copy the rest of the application code
+# Copy the entire project
 COPY . .
 
-# Install local plugins and generate types
-RUN cd /opt/app/src/plugins/strapi-plugin-ckeditor && \
+# Ensure local plugin directory exists and install its dependencies
+RUN mkdir -p /opt/app/src/plugins/strapi-plugin-ckeditor && \
+    cp -R src/plugins/strapi-plugin-ckeditor/* /opt/app/src/plugins/strapi-plugin-ckeditor/ && \
+    cd /opt/app/src/plugins/strapi-plugin-ckeditor && \
     yarn install && \
     cd /opt/app && \
     yarn run strapi ts:generate-types && \
