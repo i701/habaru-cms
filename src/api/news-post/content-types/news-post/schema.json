@@ -33,13 +33,16 @@
     "category": {
       "type": "enumeration",
       "enum": [
+        "habaru",
         "hiyaalu",
         "siyaasee",
         "beyru_dhuniye",
         "islam_dheen",
         "kulhivaru",
         "vaahaka"
-      ]
+      ],
+      "default": "habaru",
+      "required": true
     },
     "comments": {
       "type": "relation",

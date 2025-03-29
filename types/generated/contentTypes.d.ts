@@ -415,6 +415,7 @@ export interface ApiNewsPostNewsPost extends Struct.CollectionTypeSchema {
   attributes: {
     category: Schema.Attribute.Enumeration<
       [
+        'habaru',
         'hiyaalu',
         'siyaasee',
         'beyru_dhuniye',
@@ -422,7 +423,9 @@ export interface ApiNewsPostNewsPost extends Struct.CollectionTypeSchema {
         'kulhivaru',
         'vaahaka',
       ]
-    >;
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'habaru'>;
     comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     content: Schema.Attribute.Blocks & Schema.Attribute.Required;
     cover_img: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
