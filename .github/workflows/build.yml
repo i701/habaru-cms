@@ -48,6 +48,8 @@ jobs:
         with:
           target: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
           tag: "slim"
+          include-path: /opt/node_modules/rxjs /opt/node_modules/inquirer
+
 
       # Push both the regular and optimized images to Docker Hub
       - name: Push Docker Images to Docker Hub
