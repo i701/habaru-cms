@@ -50,14 +50,12 @@ jobs:
           tag: "slim"
           overwrite: true  # Overwrite the original image
 
-      # If the above step doesn't work, manually run DockerSlim with includes
-      - name: Manually Optimize Image (if needed)
+      - name: Run DockerSlim in Keep Mode
         run: |
           docker-slim build \
-            --target ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest \
-            --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:slim \
-            --include-path /opt/node_modules/rxjs \
-            --include-path /opt/node_modules/inquirer
+            --target ${{ github.repository }}:latest \
+            --tag ${{ github.repository }}:slim \
+            --preserve-path /opt/node_modules
 
       - name: Push slimmed image to Docker Hub
         run: |
