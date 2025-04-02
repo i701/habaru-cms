@@ -3,10 +3,10 @@ name: Docker Build, Optimize with DockerSlim, and Push to Docker Hub
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
+      - main
   pull_request:
     branches:
-      - main  # Trigger on pull request to main branch
+      - main
 
 env:
   IMAGE_NAME: ${{ github.repository }}
@@ -33,26 +33,24 @@ jobs:
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+      # Build the Docker image first
+      - name: Build Docker Image
+        uses: docker/build-push-action@v4
         with:
-          context: .
-          push: false  # Do not push yet, optimize first
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            NODE_ENV=production
+          push: false
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
 
-      - name: Install DockerSlim
-        run: |
-          curl -sL https://downloads.dockerslim.com/releases/1.39.0/dist_linux.tar.gz | tar -xz
-          sudo mv dist_linux/docker-slim /usr/local/bin/
-
+      # Optimize the image using DockerSlim GitHub Action
       - name: Optimize Docker Image with DockerSlim
-        run: |
-          docker-slim build --target ${{ steps.meta.outputs.tags }} --tag ${{ steps.meta.outputs.tags }}-slim
+        uses: kitabisa/docker-slim-action@v1
+        env:
+          DSLIM_HTTP_PROBE: false
+        with:
+          target: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          tag: "slim"
 
-      - name: Push Optimized Image to Docker Hub
+      # Push both the regular and optimized images to Docker Hub
+      - name: Push Docker Images to Docker Hub
         run: |
-          docker tag ${{ steps.meta.outputs.tags }}-slim ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:slim
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:slim
