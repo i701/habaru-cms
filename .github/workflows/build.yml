@@ -1,4 +1,4 @@
-name: Docker Build and Push to Docker Hub
+name: Docker Build, Optimize with DockerSlim, and Push to Docker Hub
 
 on:
   push:
@@ -12,7 +12,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push:
+  build-and-optimize:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -37,8 +37,22 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: ${{ github.event_name == 'push' }}
+          push: false  # Do not push yet, optimize first
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             NODE_ENV=production
+
+      - name: Install DockerSlim
+        run: |
+          curl -sL https://downloads.dockerslim.com/releases/1.39.0/dist_linux.tar.gz | tar -xz
+          sudo mv dist_linux/docker-slim /usr/local/bin/
+
+      - name: Optimize Docker Image with DockerSlim
+        run: |
+          docker-slim build --target ${{ steps.meta.outputs.tags }} --tag ${{ steps.meta.outputs.tags }}-slim
+
+      - name: Push Optimized Image to Docker Hub
+        run: |
+          docker tag ${{ steps.meta.outputs.tags }}-slim ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:slim
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:slim
