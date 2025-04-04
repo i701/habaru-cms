@@ -26,6 +26,12 @@
     "visible": {
       "type": "boolean",
       "default": false
+    },
+    "likes": {
+      "type": "integer"
+    },
+    "dislikes": {
+      "type": "integer"
     }
   }
 }
