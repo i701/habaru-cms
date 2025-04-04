@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "graphics_carousels",
+  "info": {
+    "singularName": "graphics-carousel",
+    "pluralName": "graphics-carousels",
+    "displayName": "Graphics Carousel"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "link": {
+      "type": "string"
+    },
+    "cover_img": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
