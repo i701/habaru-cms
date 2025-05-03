@@ -572,6 +572,7 @@ export interface ApiNewsPostNewsPost extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    reaction: Schema.Attribute.JSON;
     related_news: Schema.Attribute.Relation<
       'oneToMany',
       'api::news-post.news-post'
